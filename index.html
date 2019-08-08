@@ -28,17 +28,24 @@ img {
 	vertical-align: calc(-0.12109375em);
 }
 
+.breathe--man {
+  animation: breathe 4.0s infinite;
+}
+.breathe--dog {
+  animation: breathe 0.5s infinite;
+}
+
+@keyframes breathe {
+  0% { transform: scale(0.95); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(0.95); }
+}
 		</style>
 	</head>
 	<body>
 
-		<div id="app">
-      <wizard :name='harry'></wizard>
-      <wizard :name='ron'></wizard>
-      <wizard :name='hermione'></wizard>
-    </p>
-
-
+		<div id="app" :style="{background: background()}">
+      <p v-html="active" @click="animagus" :class="breathe()" ></p>
 		</div>
 
 		<script>
@@ -60,8 +67,8 @@ function cast(emoji) {
 }
 
 Vue.component("wizard", {
-    props: ["name"],
-    template: `<p v-html="name"></p>`
+    props: ["name", "cast"],
+    template: `<p v-html="cast(name)"></p>`
 })
 // Vue.component("harry", {
 //     template: `<p>` + emojify('harry') + `</p>`
@@ -75,14 +82,33 @@ Vue.component("wizard", {
 var app = new Vue({
 	el: "#app",
 	data: {
-    harry : emojify ("harry"),
-    ron : emojify("ron"),
-    hermione : emojify("hermione")
+    active: emojify('sirius--man'),
+    sirius: {
+      man: emojify('sirius--man'),
+      dog: emojify('sirius--dog')
+    }
   },
   methods: {
-    oculus_reparo: cast(emojify("oculus_reparo")),
-    wingardium_leviosa: cast(emojify("wingardium_leviosa")) ,
-    alohomara: cast(emojify("alohomara"))
+    animagus: function () {
+      this.active = (
+        this.active == this.sirius.man ?
+          this.sirius.dog :
+          this.sirius.man
+      )
+    },
+    breathe: function () {
+      return ( this.active == this.sirius.man ?
+      "breathe--man" :
+      "breathe--dog"
+      )
+    },
+    background: function () {
+      return (
+        this.active == this.sirius.man ?
+        "" :
+        "black"
+      )
+    },
   }
 })
 
