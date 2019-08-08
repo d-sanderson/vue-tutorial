@@ -10,6 +10,19 @@
 		<style>
 
 :root {
+
+  --white : #fff;
+  --orange: #ff691f;
+  --yellow: #fab81e ;
+  --lightgreen: #7fddb6 ;
+  --green: #19cf86 ;
+  --lightblue: #91d2fa ;
+  --blue: #1b95e0 ;
+  --grey: #abb8c2 ;
+  --red: #e81c4f ;
+  --pink: #e81ceb ;
+  --purple: #981ceb ;
+  --black: #000 ;
 	font: 1rem/1.175 "BlinkMacSystemFont", -apple-system, "Roboto", sans-serif;
 }
 
@@ -28,25 +41,41 @@ img {
 	vertical-align: calc(-0.12109375em);
 }
 
-.breathe--man {
-  animation: breathe 4.0s infinite;
-}
-.breathe--dog {
-  animation: breathe 0.5s infinite;
+.jitter {
+  display: inline-block;
+  animation: jitter 0.33s infinite alternate;
 }
 
-@keyframes breathe {
-  0% { transform: scale(0.95); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(0.95); }
+@keyframes jitter {
+  0% { transform: rotate(0deg); }
+  33% { transform: rotate(3deg); }
+  67% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
 }
 		</style>
 	</head>
 	<body>
+    <div
+      id='app'
+     :class=" { 'theme--alive': is_open && is_alive(), 'theme--dead' : !is_alive() }"
 
-		<div id="app" :style="{background: background()}">
-      <p v-html="active" @click="animagus" :class="breathe()" ></p>
-		</div>
+
+    >
+      <p>
+        Click the box!<br>
+        The cat is...
+
+        <span
+          v-html="cat"
+          @click="quantum_fluctuation()"
+          :class="{ jitter: is_alive() }">
+
+        </span>
+      </p>
+
+
+    </div>
+
 
 		<script>
 
@@ -58,6 +87,12 @@ function emojify(name) {
 	return out
 }
 
+function rand(...arr) {
+  let x = Math.floor(Math.random() * arr.length)
+  return arr[x]
+}
+
+rand()
 // cast returns a spell (function) that decorates the wizard
 function cast(emoji) {
     let magic = emojify("magic")
@@ -82,33 +117,43 @@ Vue.component("wizard", {
 var app = new Vue({
 	el: "#app",
 	data: {
-    active: emojify('sirius--man'),
-    sirius: {
-      man: emojify('sirius--man'),
-      dog: emojify('sirius--dog')
-    }
+    cat: emojify('box'),
+    alive_cats: [
+      emojify("cat--smile"),
+      emojify("cat--cheer"),
+      emojify("cat--laugh"),
+      emojify("cat--love"),
+      emojify("cat--smirk"),
+      emojify("cat--kiss"),
+      emojify("cat--fear"),
+      emojify("cat--sad"),
+      emojify("cat--mad")
+    ],
+    dead_cats: [
+      emojify('crossbones'),
+      emojify('skull')
+    ],
   },
   methods: {
-    animagus: function () {
-      this.active = (
-        this.active == this.sirius.man ?
-          this.sirius.dog :
-          this.sirius.man
-      )
+    is_open: function () {
+      return this.cat != emojify('box')
     },
-    breathe: function () {
-      return ( this.active == this.sirius.man ?
-      "breathe--man" :
-      "breathe--dog"
-      )
-    },
-    background: function () {
+    is_alive: function () {
       return (
-        this.active == this.sirius.man ?
-        "" :
-        "black"
+        this.cat != emojify('crossbones') &&
+        this.cat != emojify('skull')
       )
     },
+    quantum_fluctuation: function () {
+      if(this.is_open()) {
+        this.cat = emojify('box')
+        return
+      }
+      this.cat = rand(
+        rand(...this.alive_cats),
+        rand(...this.dead_cats),
+      )
+    }
   }
 })
 
