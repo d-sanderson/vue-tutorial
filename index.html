@@ -33,9 +33,9 @@ img {
 	<body>
 
 		<div id="app">
-      <harry></harry>
-      <ron></ron>
-      <hermione></hermione>
+      <wizard :name='harry'></wizard>
+      <wizard :name='ron'></wizard>
+      <wizard :name='hermione'></wizard>
     </p>
 
 
@@ -59,15 +59,19 @@ function cast(emoji) {
 	}
 }
 
-Vue.component("harry", {
-    template: `<p>` + emojify('harry') + `</p>`
+Vue.component("wizard", {
+    props: ["name"],
+    template: `<p v-html="name"></p>`
 })
-Vue.component("hermione", {
-    template: `<p>` + emojify('hermione') + `</p>`
-})
-Vue.component("ron", {
-    template: `<p>` + emojify('ron') + `</p>`
-})
+// Vue.component("harry", {
+//     template: `<p>` + emojify('harry') + `</p>`
+// })
+// Vue.component("hermione", {
+//     template: `<p>` + emojify('hermione') + `</p>`
+// })
+// Vue.component("ron", {
+//     template: `<p>` + emojify('ron') + `</p>`
+// })
 var app = new Vue({
 	el: "#app",
 	data: {
