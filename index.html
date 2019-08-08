@@ -57,18 +57,17 @@ img {
 	<body>
     <div
       id='app'
-     :class=" { 'theme--alive': is_open && is_alive(), 'theme--dead' : !is_alive() }"
+     :class="setTheme()"
 
 
     >
       <p>
         Click the box!<br>
-        The cat is...
-
+        The cat is
         <span
           v-html="cat"
           @click="quantum_fluctuation()"
-          :class="{ jitter: is_alive() }">
+          :class="jittering()">
 
         </span>
       </p>
@@ -153,6 +152,17 @@ var app = new Vue({
         rand(...this.alive_cats),
         rand(...this.dead_cats),
       )
+    },
+    jittering: function() {
+      return {
+        jitter: this.is_alive()
+      }
+    },
+    setTheme: function() {
+      return {
+        'theme--alive': this.is_open && this.is_alive(),
+        'theme--dead' : !this.is_alive()
+      }
     }
   }
 })
