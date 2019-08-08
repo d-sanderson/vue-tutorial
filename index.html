@@ -33,9 +33,9 @@ img {
 	<body>
 
 		<div id="app">
-      <p
-      v-for="wizard in wizards()"
-      v-html="wizard.name + ' ' + wizard.pet" >
+      <harry></harry>
+      <ron></ron>
+      <hermione></hermione>
     </p>
 
 
@@ -53,36 +53,34 @@ function emojify(name) {
 
 // cast returns a spell (function) that decorates the wizard
 function cast(emoji) {
-    if (!emoji) {
-        emoji = "¯\\_(ツ)_/¯"
-    }
-	return function (wizard) {
-		return emoji + wizard + emoji
+    let magic = emojify("magic")
+	  return function (wizard) {
+		return wizard + ' ' + magic + ' ' + emoji + magic
 	}
 }
 
+Vue.component("harry", {
+    template: `<p>` + emojify('harry') + `</p>`
+})
+Vue.component("hermione", {
+    template: `<p>` + emojify('hermione') + `</p>`
+})
+Vue.component("ron", {
+    template: `<p>` + emojify('ron') + `</p>`
+})
 var app = new Vue({
 	el: "#app",
 	data: {
-    wizard: "harry",
     harry : emojify ("harry"),
-    hedwig : emojify("hedwig"),
     ron : emojify("ron"),
-    scabbers : emojify("scabbers"),
-    hermione : emojify("hermione"),
-    crookshanks : emojify("crookshanks")
+    hermione : emojify("hermione")
   },
   methods: {
-    wizards: function () {
-      return [
-        { name: this.harry , pet: this.hedwig },
-        { name: this.ron , pet: this.scabbers },
-        { name: this.hermione , pet: this.crookshanks }
-]
-    }
+    oculus_reparo: cast(emojify("oculus_reparo")),
+    wingardium_leviosa: cast(emojify("wingardium_leviosa")) ,
+    alohomara: cast(emojify("alohomara"))
   }
 })
-app.wizard = app.ron
 
 		</script>
 
